@@ -10,6 +10,7 @@ module Revocare
     DEFAULT_FILENAME = "callbacks.pdf"
 
     def initialize(data:, format: DEFAULT_FORMAT)
+      @graph = GraphViz.new(:G, type: :digraph)
       @data = data
       @format = format
       validate_format!
@@ -31,14 +32,13 @@ module Revocare
       extension = File.extname(filename).tr(".", "").to_sym
 
       if format == GRAPHVIZ_FORMAT
-        graph = GraphViz.new(:G, type: :digraph)
-
-        data.each do |model_data|
-          model_node = graph.add_node(model_data[:model])
-          model_data[:callbacks].each do |c|
-            name_node = graph.add_node(c[:callback_name])
+        data.each_with_index do |model_data, index|
+          model_node = add_model_node(model_data[:model])
+          model_data[:callbacks].each do |callback|
+            name, chain = callback.values_at(:callback_name, :callback_chain)
+            name_node = add_callback_node(index, name)
             graph.add_edge(model_node, name_node)
-            method_nodes = c[:callback_chain].map(&graph.method(:add_node))
+            method_nodes = chain.map(&method(:add_callback_chain_node).curry[index])
             graph.add_edges(name_node, method_nodes)
           end
         end
@@ -49,12 +49,28 @@ module Revocare
 
     private
 
-    attr_reader :data
+    attr_reader :data, :graph
 
     def validate_format!
       if !SUPPORTED_FORMATS.include?(@format)
         raise ArgumentError, "Data format is not supported"
       end
+    end
+
+    def add_model_node(name)
+      add_node(name, nil, :box)
+    end
+
+    def add_callback_node(index, name)
+      add_node(name, index, :diamond)
+    end
+
+    def add_callback_chain_node(index, name)
+      add_node(name, index, :ellipse)
+    end
+
+    def add_node(name, index, shape)
+      graph.add_node("#{name}#{index}", label: name, shape: shape)
     end
   end
 end

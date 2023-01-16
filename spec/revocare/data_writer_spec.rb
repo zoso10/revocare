@@ -82,8 +82,8 @@ RSpec.describe Revocare::DataWriter do
       expect(contents).to start_with("digraph G {")
       expect(contents).to include("label=Address")
       expect(contents).to include("label=perform_magic")
-      expect(contents).to include("Address -> after_save")
-      expect(contents).to include("after_save -> cleanup")
+      expect(contents).to include("Address -> after_save0")
+      expect(contents).to include("after_save0 -> cleanup")
       expect(contents).to include("label=Product")
       expect(contents).to include("label=User")
     end
