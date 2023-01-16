@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "active_record"
 require "ruby-graphviz"
 
 require_relative "revocare/callback_data"
