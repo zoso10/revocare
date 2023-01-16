@@ -23,7 +23,7 @@ RSpec.describe Revocare::CallbackData do
               },
               {
                 callback_name: "after_save",
-                callback_chain: ["cleanup", "wreak_havoc", "perform_magic"],
+                callback_chain: ["perform_magic", "wreak_havoc", "cleanup"],
               },
               {
                 callback_name: "before_save",

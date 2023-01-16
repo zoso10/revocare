@@ -47,7 +47,7 @@ module Revocare
           callback_chain.each do |callback|
             type = [callback.kind, callback.name].join("_")
             callbacks_acc[type] ||= []
-            callbacks_acc[type] << callback.filter.to_s
+            callbacks_acc[type].prepend(callback.filter.to_s)
           end
         end
       end

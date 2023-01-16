@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    revocare (0.1.0)
-      activerecord (>= 5.2.0, < 7.1)
+    revocare (0.1.1)
+      activerecord (>= 5.2, < 7.1)
       ruby-graphviz (~> 1.2)
 
 GEM

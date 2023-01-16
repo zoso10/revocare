@@ -12,7 +12,7 @@ RSpec.describe Revocare::DataWriter do
           },
           {
             callback_name: "after_save",
-            callback_chain: ["cleanup", "wreak_havoc", "perform_magic"],
+            callback_chain: ["perform_magic", "wreak_havoc", "cleanup"],
           },
           {
             callback_name: "before_save",
@@ -81,9 +81,9 @@ RSpec.describe Revocare::DataWriter do
       contents = File.read(file)
       expect(contents).to start_with("digraph G {")
       expect(contents).to include("label=Address")
-      expect(contents).to include("label=perform_magic")
-      expect(contents).to include("Address -> after_save0")
-      expect(contents).to include("after_save0 -> cleanup")
+      expect(contents).to include("label=\"1) #perform_magic\"")
+      expect(contents).to include("Address -> \":after_save0\"")
+      expect(contents).to include("\":after_save0\" -> cleanup")
       expect(contents).to include("label=Product")
       expect(contents).to include("label=User")
     end

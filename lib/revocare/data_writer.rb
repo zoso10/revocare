@@ -36,9 +36,12 @@ module Revocare
           model_node = add_model_node(model_data[:model])
           model_data[:callbacks].each do |callback|
             name, chain = callback.values_at(:callback_name, :callback_chain)
-            name_node = add_callback_node(index, name)
+            name_node = add_callback_node(name, index)
+            method_nodes = chain.each_with_index.map do |method, order|
+              add_callback_chain_node(method, index, order)
+            end
+
             graph.add_edge(model_node, name_node)
-            method_nodes = chain.map(&method(:add_callback_chain_node).curry[index])
             graph.add_edges(name_node, method_nodes)
           end
         end
@@ -61,16 +64,17 @@ module Revocare
       add_node(name, nil, :box)
     end
 
-    def add_callback_node(index, name)
-      add_node(name, index, :diamond)
+    def add_callback_node(name, index)
+      add_node(":#{name}", index, :diamond)
     end
 
-    def add_callback_chain_node(index, name)
-      add_node(name, index, :ellipse)
+    def add_callback_chain_node(name, index, order)
+      label = "#{order + 1}) ##{name}"
+      add_node(name, index, :ellipse, label)
     end
 
-    def add_node(name, index, shape)
-      graph.add_node("#{name}#{index}", label: name, shape: shape)
+    def add_node(name, index, shape, label = nil)
+      graph.add_node("#{name}#{index}", label: label || name, shape: shape)
     end
   end
 end
