@@ -29,7 +29,9 @@ RSpec.configure do |config|
     stub_graphviz_library(present: true)
   end
 
-  config.after do
-    FileHelper.reset!
+  config.after do |example|
+    if !example.metadata[:skip_file_cleanup]
+      FileHelper.reset!
+    end
   end
 end
