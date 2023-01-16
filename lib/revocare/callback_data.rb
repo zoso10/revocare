@@ -35,7 +35,7 @@ module Revocare
     attr_reader :data
 
     def all_models
-      ActiveRecord::Base
+      ::ActiveRecord::Base
         .descendants
         .reject { |model| INTERNAL_MODELS.include?(model&.name) }
         .sort_by(&:name)

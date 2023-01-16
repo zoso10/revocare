@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "revocare"
+
 module Revocare
   class CLI
     def self.call
@@ -28,8 +30,8 @@ module Revocare
     end
 
     def call
-      data = CallbackData.to_a
-      writer = DataWriter.new(data: data)
+      data = Revocare::CallbackData.to_a
+      writer = Revocare::DataWriter.new(data: data)
       writer.write_to_file
     end
   end
