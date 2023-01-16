@@ -27,7 +27,16 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_runtime_dependency "ruby-graphviz", "~> 1.2"
+
+  spec.add_development_dependency "activerecord"
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "faker"
+  spec.add_development_dependency "pry-byebug"
+  spec.add_development_dependency "rails", ">= 5.2", "< 7.1"
   spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "rubocop"
   spec.add_development_dependency "rubocop-rspec"
+  spec.add_development_dependency "sqlite3"
 end

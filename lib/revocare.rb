@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require "ruby-graphviz"
+
+require_relative "revocare/callback_data"
+require_relative "revocare/cli"
+require_relative "revocare/data_writer"
 require_relative "revocare/version"
 
 module Revocare
-  class Error < StandardError; end
-  # Your code goes here...
 end

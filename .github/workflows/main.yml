@@ -23,5 +23,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run the default task
+    - name: Run linter
+      run: bundle exec rubocop
+    - name: Run the test suite
       run: bundle exec rake
