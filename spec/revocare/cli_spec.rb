@@ -7,6 +7,10 @@ RSpec.describe Revocare::CLI do
     User.connection
   end
 
+  before do
+    stub_rails_environment_file(present: true)
+  end
+
   describe "initialization" do
     it "raises if `ActiveRecord` is not defined" do
       allow(Module).to receive(:const_defined?).and_call_original
@@ -18,14 +22,14 @@ RSpec.describe Revocare::CLI do
     end
 
     it "loads the rails environment configuration file" do
-      allow(Kernel).to receive(:require).with(/config\/environment.rb/).and_call_original
-
       described_class.new
 
       expect(Kernel).to have_received(:require).with(/config\/environment.rb/)
     end
 
     it "outputs a message if it could not load rails environment file" do
+      stub_rails_environment_file(present: false)
+
       expect do
         described_class.new
       end.to output("Tried to load Rails environment but could not find it\n").to_stdout
