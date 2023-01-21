@@ -46,11 +46,12 @@ module Revocare
         model.__callbacks.each do |_key, callback_chain|
           callback_chain.each do |callback|
             type = [callback.kind, callback.name].join("_")
+            methods = extract_methods(callback.filter)
             callbacks_acc[type] ||= []
-            callbacks_acc[type].prepend(callback.filter.to_s)
+            callbacks_acc[type] += methods
           end
         end
-      end
+      end.transform_values(&:reverse)
     end
 
     def format_callbacks(callbacks)
@@ -59,6 +60,17 @@ module Revocare
           callback_name: name,
           callback_chain: chain,
         }
+      end
+    end
+
+    def extract_methods(callback_filter)
+      if callback_filter.is_a?(ActiveModel::Validator)
+        name = callback_filter.class.name.demodulize.underscore
+        callback_filter.attributes.map do |attr|
+          [name, attr].join(":")
+        end
+      else
+        [callback_filter.to_s]
       end
     end
   end

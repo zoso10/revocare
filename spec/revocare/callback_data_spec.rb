@@ -3,6 +3,7 @@
 RSpec.describe Revocare::CallbackData do
   before do
     Address.connection
+    Order.connection
     Product.connection
     User.connection
   end
@@ -11,7 +12,7 @@ RSpec.describe Revocare::CallbackData do
     it "returns a collection of each model's callbacks" do
       data = described_class.new.to_a
 
-      expect(data.length).to eq(3)
+      expect(data.length).to eq(4)
       expect(data).to eq(
         [
           {
@@ -29,6 +30,21 @@ RSpec.describe Revocare::CallbackData do
                 callback_name: "before_save",
                 callback_chain: ["set_defaults"],
               },
+            ]
+          },
+          {
+            model: "Order",
+            callbacks: [
+              {
+                callback_name: "before_validate",
+                callback_chain: [
+                  "numericality_validator:total",
+                  "numericality_validator:item_count",
+                  "presence_validator:total",
+                  "presence_validator:item_count",
+                  "cant_modify_encrypted_attributes_when_frozen"
+                ],
+              }
             ]
           },
           {

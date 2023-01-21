@@ -3,6 +3,7 @@ PATH
   specs:
     revocare (0.1.1)
       activerecord (>= 5.2, < 7.1)
+      activesupport (>= 5.2, < 7.1)
       ruby-graphviz (~> 1.2)
 
 GEM
