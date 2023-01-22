@@ -3,6 +3,7 @@
 RSpec.describe Revocare::CLI do
   before do
     Address.connection
+    Order.connection
     Product.connection
     User.connection
   end
@@ -60,10 +61,14 @@ RSpec.describe Revocare::CLI do
   end
 
   describe "#call" do
-    it "writes all ActiveRecord callbacks to a file" do
+    it "writes all ActiveRecord callbacks to files", :skip_file_cleanup do
       expect do
         described_class.call
-      end.to change { File.exist?("callbacks.pdf") }.from(false).to(true)
+      end.to change { Dir.exist?("./callbacks") }.from(false).to(true)
+        .and change { File.exist?("./callbacks/address.pdf") }.from(false).to(true)
+        .and change { File.exist?("./callbacks/order.pdf") }.from(false).to(true)
+        .and change { File.exist?("./callbacks/product.pdf") }.from(false).to(true)
+        .and change { File.exist?("./callbacks/user.pdf") }.from(false).to(true)
     end
   end
 end

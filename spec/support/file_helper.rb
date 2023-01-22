@@ -4,22 +4,8 @@ require "faker"
 
 module FileHelper
   class << self
-    attr_writer :filenames
-
-    def new_filename!(extension: "pdf")
-      @filenames ||= []
-
-      Faker::File.file_name(dir: ".", ext: extension).tap do |filename|
-        @filenames.push(filename)
-      end
-    end
-
     def reset!
-      @filenames ||= []
-      @filenames.each(&FileUtils.method(:rm_rf))
-      @filenames = []
-
-      FileUtils.rm_f(Revocare::DataWriter::DEFAULT_FILENAME)
+      FileUtils.rmtree(Revocare::DataWriter::DEFAULT_DIRECTORY)
     end
   end
 

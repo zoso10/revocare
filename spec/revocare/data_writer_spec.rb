@@ -40,8 +40,7 @@ RSpec.describe Revocare::DataWriter do
       },
     ]
   end
-  let(:filename) { FileHelper.new_filename! }
-  let(:default_filename) { "callbacks.pdf" }
+  let(:directory_name) { FileHelper.new_directory! }
 
   before do
     stub_graphviz_library(present: true)
@@ -55,37 +54,42 @@ RSpec.describe Revocare::DataWriter do
     end
   end
 
-  describe "#write_to_file" do
-    it "creates a file from the specified filename" do
+  describe "#write_to_directory" do
+    it "creates a directory if it does not exist" do
       writer = described_class.new(data: data)
 
       expect do
-        writer.write_to_file(filename: filename)
-      end.to change { File.exist?(filename) }.from(false).to(true)
+        writer.write_to_directory
+      end.to change { Dir.exist?("./callbacks") }.from(false).to(true)
     end
 
-    it "uses a default filename" do
+    it "writes an individual file for each model" do
       writer = described_class.new(data: data)
 
       expect do
-        writer.write_to_file
-      end.to change { File.exist?(default_filename) }.from(false).to(true)
+        writer.write_to_directory
+      end.to change { File.exist?("./callbacks/address.pdf") }.from(false).to(true)
+        .and change { File.exist?("./callbacks/product.pdf") }.from(false).to(true)
+        .and change { File.exist?("./callbacks/user.pdf") }.from(false).to(true)
     end
 
-    it "writes the data as graphviz" do
+    it "writes the data as graphviz format with `dot` extension" do
       writer = described_class.new(data: data)
-      file = FileHelper.new_filename!(extension: "dot")
 
-      writer.write_to_file(filename: file)
+      writer.write_to_directory(extension: "dot")
 
-      contents = File.read(file)
-      expect(contents).to start_with("digraph G {")
-      expect(contents).to include("label=Address")
-      expect(contents).to include("label=\"1) #perform_magic\"")
-      expect(contents).to include("Address -> \":after_save0\"")
-      expect(contents).to include("\":after_save0\" -> cleanup")
-      expect(contents).to include("label=Product")
-      expect(contents).to include("label=User")
+      address_contents = File.read("./callbacks/address.dot")
+      product_contents = File.read("./callbacks/product.dot")
+      user_contents = File.read("./callbacks/user.dot")
+      expect(address_contents).to start_with("digraph G {")
+      expect(address_contents).to include("label=Address")
+      expect(address_contents).to include("label=\"1) #perform_magic\"")
+      expect(address_contents).to include("Address -> \":after_save0\"")
+      expect(address_contents).to include("\":after_save0\" -> cleanup")
+      expect(product_contents).to start_with("digraph G {")
+      expect(product_contents).to include("label=Product")
+      expect(user_contents).to start_with("digraph G {")
+      expect(user_contents).to include("label=User")
     end
   end
 

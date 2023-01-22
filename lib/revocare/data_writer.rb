@@ -7,10 +7,11 @@ module Revocare
     SUPPORTED_FORMATS = [
       GRAPHVIZ_FORMAT,
     ].freeze
-    DEFAULT_FILENAME = "callbacks.pdf"
+    DEFAULT_DIRECTORY = "./callbacks"
+    DEFAULT_EXTENSION = "pdf"
 
     def initialize(data:, format: DEFAULT_FORMAT)
-      @graph = GraphViz.new(:G, type: :digraph)
+      @graphs = []
       @data = data
       @format = format
       validate_format!
@@ -28,31 +29,37 @@ module Revocare
       @format
     end
 
-    def write_to_file(filename: DEFAULT_FILENAME)
-      extension = File.extname(filename).tr(".", "").to_sym
+    def write_to_directory(extension: DEFAULT_EXTENSION)
+      FileUtils.mkdir_p(DEFAULT_DIRECTORY)
 
       if format == GRAPHVIZ_FORMAT
         data.each_with_index do |model_data, index|
-          model_node = add_model_node(model_data[:model])
+          @current_graph = GraphViz.new(:G, type: :digraph)
+
+          model_name = model_data[:model]
+          model_node = add_model_node(model_name)
+
           model_data[:callbacks].each do |callback|
             name, chain = callback.values_at(:callback_name, :callback_chain)
             name_node = add_callback_node(name, index)
+
             method_nodes = chain.each_with_index.map do |method, order|
               add_callback_chain_node(method, index, order)
             end
 
-            graph.add_edge(model_node, name_node)
-            graph.add_edges(name_node, method_nodes)
+            current_graph.add_edge(model_node, name_node)
+            current_graph.add_edges(name_node, method_nodes)
           end
-        end
 
-        graph.output(extension => filename)
+          filename = "#{DEFAULT_DIRECTORY}/#{model_name.downcase}.#{extension}"
+          current_graph.output(extension => filename)
+        end
       end
     end
 
     private
 
-    attr_reader :data, :graph
+    attr_reader :data, :graphs, :current_graph
 
     def validate_format!
       if !SUPPORTED_FORMATS.include?(@format)
@@ -74,7 +81,7 @@ module Revocare
     end
 
     def add_node(name, index, shape, label = nil)
-      graph.add_node("#{name}#{index}", label: label || name, shape: shape)
+      current_graph.add_node("#{name}#{index}", label: label || name, shape: shape)
     end
   end
 end

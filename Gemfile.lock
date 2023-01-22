@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    revocare (0.1.1)
+    revocare (0.2.0)
       activerecord (>= 5.2, < 7.1)
       activesupport (>= 5.2, < 7.1)
       ruby-graphviz (~> 1.2)

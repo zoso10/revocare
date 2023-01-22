@@ -30,7 +30,7 @@ module Revocare
     def call
       data = Revocare::CallbackData.to_a
       writer = Revocare::DataWriter.new(data: data)
-      writer.write_to_file
+      writer.write_to_directory
     end
   end
 end
