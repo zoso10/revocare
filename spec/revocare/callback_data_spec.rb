@@ -38,10 +38,12 @@ RSpec.describe Revocare::CallbackData do
               {
                 callback_name: "before_validate",
                 callback_chain: [
-                  "numericality_validator:total",
-                  "numericality_validator:item_count",
-                  "presence_validator:total",
-                  "presence_validator:item_count",
+                  "CustomValidator",
+                  "CustomEachValidator:item_count",
+                  "NumericalityValidator:total",
+                  "NumericalityValidator:item_count",
+                  "PresenceValidator:total",
+                  "PresenceValidator:item_count",
                   "cant_modify_encrypted_attributes_when_frozen"
                 ],
               }

@@ -65,9 +65,14 @@ module Revocare
 
     def extract_methods(callback_filter)
       if callback_filter.is_a?(ActiveModel::Validator)
-        name = callback_filter.class.name.demodulize.underscore
-        callback_filter.attributes.map do |attr|
-          [name, attr].join(":")
+        name = callback_filter.class.name.demodulize
+
+        if callback_filter.respond_to?(:attributes)
+          callback_filter.attributes.map do |attribute|
+            [name, attribute].join(":")
+          end
+        else
+          [name]
         end
       else
         [callback_filter.to_s]

@@ -1,5 +1,9 @@
 # `revocare`
 
+## [0.2.1] (Unreleased)
+- Properly handle custom validators
+- Show validator class name instead of underscore-d name
+
 ## [0.2.0]
 - Create a directory to hold all files. Also, create a file for each model rather than a single file for all models. This vastly improves readability.
 
