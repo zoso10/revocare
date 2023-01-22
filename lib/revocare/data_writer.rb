@@ -34,7 +34,7 @@ module Revocare
 
       if format == GRAPHVIZ_FORMAT
         data.each_with_index do |model_data, index|
-          @current_graph = GraphViz.new(:G, type: :digraph)
+          @current_graph = GraphViz.new(:G, type: :digraph, rankdir: "LR")
 
           model_name = model_data[:model]
           model_node = add_model_node(model_name)

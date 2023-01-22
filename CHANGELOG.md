@@ -1,6 +1,9 @@
 # `revocare`
 
-## [0.2.1] (Unreleased)
+## [0.2.2] (Unreleased)
+- Use "left-to-right" direction for diagrams for better readability
+
+## [0.2.1]
 - Properly handle custom validators
 - Show validator class name instead of underscore-d name
 

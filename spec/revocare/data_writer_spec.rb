@@ -82,6 +82,7 @@ RSpec.describe Revocare::DataWriter do
       product_contents = File.read("./callbacks/product.dot")
       user_contents = File.read("./callbacks/user.dot")
       expect(address_contents).to start_with("digraph G {")
+      expect(address_contents).to include("rankdir=LR")
       expect(address_contents).to include("label=Address")
       expect(address_contents).to include("label=\"1) #perform_magic\"")
       expect(address_contents).to include("Address -> \":after_save0\"")
