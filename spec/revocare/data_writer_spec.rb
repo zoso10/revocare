@@ -25,7 +25,11 @@ RSpec.describe Revocare::DataWriter do
         callbacks: [
           {
             callback_name: "before_validate",
-            callback_chain: ["cant_modify_encrypted_attributes_when_frozen"],
+            callback_chain: [
+              "CustomValidator",
+              "PresenceValidator:item_count",
+              "cant_modify_encrypted_attributes_when_frozen",
+            ],
           },
         ],
       },
@@ -84,11 +88,12 @@ RSpec.describe Revocare::DataWriter do
       expect(address_contents).to start_with("digraph G {")
       expect(address_contents).to include("rankdir=LR")
       expect(address_contents).to include("label=Address")
-      expect(address_contents).to include("label=\"1) #perform_magic\"")
       expect(address_contents).to include("Address -> \":after_save0\"")
       expect(address_contents).to include("\":after_save0\" -> cleanup")
       expect(product_contents).to start_with("digraph G {")
       expect(product_contents).to include("label=Product")
+      expect(product_contents).to include("label=\"1) CustomValidator\"")
+      expect(product_contents).to include("label=\"2) PresenceValidator:item_count\"")
       expect(user_contents).to start_with("digraph G {")
       expect(user_contents).to include("label=User")
     end

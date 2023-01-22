@@ -2,6 +2,7 @@
 
 ## [0.2.2] (Unreleased)
 - Use "left-to-right" direction for diagrams for better readability
+- Only add "#" to method names and not validator class names
 
 ## [0.2.1]
 - Properly handle custom validators

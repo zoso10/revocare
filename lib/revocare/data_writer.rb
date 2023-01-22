@@ -76,7 +76,11 @@ module Revocare
     end
 
     def add_callback_chain_node(name, index, order)
-      label = "#{order + 1}) ##{name}"
+      label = if name[0].match(/[[:upper:]]/)
+                "#{order + 1}) #{name}"
+              else
+                "#{order + 1}) ##{name}"
+              end
       add_node(name, index, :ellipse, label)
     end
 
