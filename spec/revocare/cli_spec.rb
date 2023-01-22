@@ -61,7 +61,7 @@ RSpec.describe Revocare::CLI do
   end
 
   describe "#call" do
-    it "writes all ActiveRecord callbacks to files", :skip_file_cleanup do
+    it "writes all ActiveRecord callbacks to files" do
       expect do
         described_class.call
       end.to change { Dir.exist?("./callbacks") }.from(false).to(true)
