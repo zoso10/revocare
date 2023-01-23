@@ -1,6 +1,6 @@
 # `revocare`
 
-## [0.2.2] (Unreleased)
+## [0.2.2]
 - Use "left-to-right" direction for diagrams for better readability
 - Only add "#" to method names and not validator class names
 
